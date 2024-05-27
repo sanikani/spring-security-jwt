@@ -29,7 +29,6 @@ public class User {
         return user;
     }
 
-    //encode password
     public void encodePassword(PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(this.password);
     }

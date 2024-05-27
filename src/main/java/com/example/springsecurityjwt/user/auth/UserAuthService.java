@@ -13,11 +13,12 @@ public class UserAuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void signup(UserAuthDto userAuthDto) {
-        if(userRepository.existsByUsername(userAuthDto.getUsername())) {
+    public void join(UserAuthDto userAuthDto) {
+
+        if (userRepository.existsByUsername(userAuthDto.getUsername())) {
             throw new IllegalArgumentException("Username is already taken");
         }
-        userRepository.existsByUsername(userAuthDto.getUsername());
+
         User user = User.createUser(userAuthDto);
         user.encodePassword(passwordEncoder);
         userRepository.save(user);
