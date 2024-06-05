@@ -1,5 +1,6 @@
 package com.example.springsecurityjwt.jwt;
 
+import com.example.springsecurityjwt.user.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,7 +13,7 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
-    private final CustomUserInfoDto user;
+    private final User user;
 
     @Override
     public String getUsername() {
@@ -23,7 +24,7 @@ public class CustomUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> roles = new ArrayList<>();
 
-        roles.add((GrantedAuthority) () -> user.getRole());
+        roles.add((GrantedAuthority) user::getRole);
 
         return roles;
     }

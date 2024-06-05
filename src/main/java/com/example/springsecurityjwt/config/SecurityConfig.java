@@ -1,5 +1,7 @@
 package com.example.springsecurityjwt.config;
 
+import com.example.springsecurityjwt.jwt.JwtFilter;
+import com.example.springsecurityjwt.jwt.JwtUtil;
 import com.example.springsecurityjwt.jwt.LoginFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +22,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
+
+    private final JwtUtil jwtUtil;
 
     private static final String[] AUTH_WHITELIST = {
             "/join", "/", "/login"
@@ -55,7 +59,10 @@ public class SecurityConfig {
                         .anyRequest().authenticated());
 
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration)), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class);
+
+        http
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration),jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         //세션 설정
         http
